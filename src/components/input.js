@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {logDOM} from "@testing-library/react";
 
 export default function Input(){
     const [isShow, setIsShow] = useState([true, false, false, false, false, false]);
+    const [isBlink, setIsBlink] = useState([false, false, false, false, false, false]);
     const [isSelect, setIsSelect] = useState([false, false, false, false, false, false]);
     const [isDelete, setIsDelete] = useState(false);
     
@@ -47,14 +47,29 @@ export default function Input(){
                                                         !element ?
                                                             <button
                                                                 type="button"
-                                                                className="px-[15px] pt-[6px] pb-[4px] absolute right-[30%] text-white text-[14px] font-Mabinogi translate-x-full bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]"
-                                                                onMouseOver={(event)=>{
-                                                                    console.log(event.target);
-                                                                    isShow.map(function (child, subIndex) {
-                                                                        if (index >= subIndex) {
+                                                                className={`${isBlink[index] && "blink_animation"} px-[15px] pt-[6px] pb-[4px] absolute right-[30%] text-white text-[14px] font-Mabinogi translate-x-full bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
+                                                                onMouseEnter={()=>{
+                                                                    isBlink.map(function (child, subIndex) {
+                                                                        if (index > subIndex) {
                                                                             //click index 의 값이 subIndex 보다 크거나 같을 때
                                                                             if(subIndex !== 0){
-                                                                            
+                                                                                console.log(index, subIndex);
+                                                                                isBlink[subIndex] = true;
+                                                                                setIsBlink([...isBlink]);
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }}
+                                                                onMouseLeave={()=>{
+                                                                    isBlink.map(function (child, subIndex) {
+                                                                        isBlink[subIndex] = false;
+                                                                        setIsBlink([...isBlink]);
+                                                                        if (index > subIndex) {
+                                                                            //click index 의 값이 subIndex 보다 크거나 같을 때
+                                                                            if(subIndex !== 0){
+                                                                                console.log(index, subIndex);
+
+
                                                                             }
                                                                         }
                                                                     });
@@ -92,7 +107,7 @@ export default function Input(){
                                                     {
                                                         !element ?
                                                             <button type="button"
-                                                                    className="px-[15px] pt-[6px] pb-[4px] absolute left-[22%] text-white text-[14px] font-Mabinogi translate-x-[-50%] bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]">추가
+                                                                    className={`${isBlink[index] && "blink_animation"} px-[15px] pt-[6px] pb-[4px] absolute left-[22%] text-white text-[14px] font-Mabinogi translate-x-[-50%] bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}>추가
                                                             </button>
                                                             : null
                                                     }
