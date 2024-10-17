@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default function Input(){
     const skill = useSelector((state)=> state.skill );
-    const [isShow, setIsShow] = useState([true, false, false, false, false, false]);
+    const [isShow, setIsShow] = useState([true, false, false, false, false, false]); // inputData 로 이동
     const [isBlink, setIsBlink] = useState([false, false, false, false, false, false]);
-    const [isSelect, setIsSelect] = useState([false, false, false, false, false, false]);
+    const [isSelect, setIsSelect] = useState([false, false, false, false, false, false]); // inputData 로 이동
     const [inputData, setInputData] = useState([
-        {skill:"blank", percent:0},{skill:"blank", percent:0},{skill:"blank", percent:0},{skill:"blank", percent:0},{skill:"blank", percent:0},{skill:"blank", percent:0},
+        {skill:"blank", percent:"", isAdd:true, isSelect:false},{skill:"blank", percent:"", isAdd:false, isSelect:false},
+        {skill:"blank", percent:"", isAdd:false, isSelect:false},{skill:"blank", percent:"", isAdd:false, isSelect:false},
+        {skill:"blank", percent:"", isAdd:false, isSelect:false},{skill:"blank", percent:"", isAdd:false, isSelect:false},
     ])
     
     const countSelect = isSelect.filter((element)=> element === true).length;
@@ -17,13 +19,16 @@ export default function Input(){
      *  1. isShow: 추가 버튼 클릭 시 콤보 칸 활성화 false -> true
      *      1-1. index 0은 초기 값 true
      *      1-2. custom 에서도 해당 값이 연동되어야 하는 가? -> NO (redux store/data.js 삽입 여부)
- *      2. isBlink : mouseEnter / mouseLeave 활용 event
+     *  2. isBlink : mouseEnter / mouseLeave 활용 event
      *      2-1. mouseEnter 시 enter element index 와 같거나 미만인 index가 true로 변환되며 깜빡임
      *      2-2. mouseLeave 시 ALL element index 가 false로 변환
      *  3. isSelect : 스킬 칸 클릭 시 (스킬 변경을 위한) 활성화 여부 false -> true
      *      3-1. 클릭할 때 마다 prev value의 반대로 변경
      *      3-2. custom 에서도 연동되어야 하는가 ? -> NO, why? combeData에 있는 개수만큼 순서대로 custom에서 뿌려주면 되고, 중간을 뛰어넘고 기입할 수 없기 떄문
      * **/
+    
+    /* TODO :: state isShow를 inputData.isAdd로 이동중, 이동 완료되면 isAdd -> isShow name 변경 진행
+    * */
 
     const addMouseEnter = (index) => {
         isBlink.map(function (child, subIndex) {
@@ -44,23 +49,23 @@ export default function Input(){
         });
     }
     const addClickShow = (index) => {
-        isShow.map(function (child, subIndex) {
+        inputData.map(function (child, subIndex) {
             if (index >= subIndex) {
                 //isBlink이 현재 index 혹은 낮은 index가 true일 경우 모두 false로 변환
                 isBlink[subIndex] = false;
                 setIsBlink([...isBlink]);
-
+                
                 //isShow index 1부터 click index까지 모두 true로 변환
                 if(subIndex !== 0){
-                    isShow[subIndex] = true;
-                    setIsShow([...isShow]);
+                    inputData[subIndex].isAdd = true;
                 }
             }
-            return [...isShow]  //?????
         });
+        setInputData([...inputData]);
+        console.log(inputData);
     }
     const percentInput = (index, event) => {
-        //입력한 값이 maxLength보다 크거나 같을 경우 e.target.value값을 잘라줌z
+        //입력한 값이 maxLength보다 크거나 같을 경우 e.target.value값을 잘라줌
         if(event.target.value.length >= event.target.maxLength) {
             event.target.value = event.target.value.slice(0, event.target.maxLength);
         }
@@ -97,192 +102,224 @@ export default function Input(){
                     {/* 도움말 */}
                     <h5>도움말</h5>
                 </div>
-                <div className="">
+                <div>
                     {/* 콤보 카드 입력 창 */}
                     <h5 className="w-[488px] pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[url('/public/images/common/bg_top.png')]">콤보 카드 입력창</h5>
                     <div className="w-[484px] pt-[10px] pb-[20px] m-auto bg-no-repeat bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
                         {/* 콤보 카드 내부 */}
-                        <div className="w-[351px] pt-[140px] px-[25px] pb-[44px] m-auto bg-no-repeat bg-[url('/public/images/common/combocard_bg.jpg')]">
-                            <div>
-                                {
-                                    isShow.map(function(element, index){
-                                        if(index === 1 || index === 3 || index === 5){
-                                            return (
-                                                <div className="h-[58px] relative flex flex-row-reverse items-center mt-[-20px]">
-                                                    {
-                                                        !element ?
-                                                            <button
-                                                                type="button"
-                                                                className={`${isBlink[index] && "animate-blink"} px-[15px] pt-[6px] pb-[4px] absolute right-[30%] text-white text-[14px] font-Mabinogi translate-x-full bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
-                                                                onMouseEnter={()=>addMouseEnter(index)} onMouseLeave={()=>addMouseLeave()} onClick={() =>addClickShow(index)}>추가
-                                                            </button>
-                                                            : null
-                                                    }
-                                                    {
-                                                        element ?
-                                                            <div className="
-                                                                h-[100%] flex flex-row-reverse relative
-                                                                before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:left-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_left.png')]
-                                                            ">
-                                                                <div className="
-                                                                        w-[68px] h-[100%] relative bg-black font-Mabinogi text-[#ffff5c]
-                                                                        before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
-                                                                        after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
-                                                                    ">
-                                                                    <input type="number" maxLength="2" min="0" max="100" value={inputData[index].percent} placeholder="88" className="
-                                                                        w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                                                                        " onChange={(event)=>{
-                                                                            //TODO:: 태그 내 value 공란, 이후 입력 시작 시 inputData state in data push
-                                                                            percentInput(index, event);
-                                                                    }}/>
-                                                                </div>
-                                                                <button type="button"
-                                                                        className={`
-                                                                            w-[58px] h-[58px] relative text-[0px]
-                                                                            before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                            after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
-                                                                        `}
-                                                                        onClick={()=>{
-                                                                            selectActive(index);
-                                                                        }}
-                                                                ><img src={`/images/common/skill/${inputData[index].skill}.jpg`} alt={inputData[index].skill} className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
-                                                                </button>
-                                                            </div>
-                                                            : null
-                                                    }
-                                                </div>
-                                            )
-                                        } else if (index === 2 || index === 4) {
-                                            return (
-                                                <div className="h-[58px] relative flex items-center mt-[-20px]">
-                                                    {
-                                                        !element ?
-                                                            <button type="button"
-                                                                    className={`${isBlink[index] && "animate-blink"}  px-[15px] pt-[6px] pb-[4px] absolute left-[22%] text-white text-[14px] font-Mabinogi translate-x-[-50%] bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
+                        <form action="">
+                            <div className="w-[351px] pt-[140px] px-[25px] pb-[44px] m-auto bg-no-repeat bg-[url('/public/images/common/combocard_bg.jpg')]">
+                                <div>
+                                    {
+                                        inputData.map(function(element, index){
+                                            if(index === 1 || index === 3 || index === 5){
+                                                return (
+                                                    <div className="h-[58px] relative flex flex-row-reverse items-center mt-[-20px]">
+                                                        {
+                                                            !element.isAdd ?
+                                                                <button
+                                                                    type="button"
+                                                                    className={`${isBlink[index] && "animate-blink"} px-[15px] pt-[6px] pb-[4px] absolute right-[30%] text-white text-[14px] font-Mabinogi translate-x-full bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
                                                                     onMouseEnter={()=>addMouseEnter(index)} onMouseLeave={()=>addMouseLeave()} onClick={() =>addClickShow(index)}>추가
-                                                            </button>
-                                                            : null
-                                                    }
-                                                    {
-                                                        element ?
-                                                            <div className="
-                                                                h-[100%] flex relative
-                                                                before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:right-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_right.png')]
-                                                            ">
-                                                                <div className="
-                                                                        w-[68px] h-[100%] relative bg-black font-Mabinogi text-[#ffff5c]
-                                                                        before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
-                                                                        after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
-                                                                    ">
-                                                                    <input type="number" maxLength="2" min="0" max="100"
-                                                                           value={inputData[index].percent}
-                                                                           placeholder="00" className="
-                                                                        w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                                                                        " onChange={(event) => {
-                                                                        //TODO:: 태그 내 value 공란, 이후 입력 시작 시 inputData state in data push
-                                                                        percentInput(index, event);
-                                                                    }}/>
-                                                                </div>
-                                                                <button type="button"
-                                                                        className={`
-                                                                            w-[58px] h-[58px] relative text-[0px]
-                                                                            before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                            after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
-                                                                        `}
-                                                                        onClick={() => {
-                                                                            selectActive(index);
-                                                                        }}
-                                                                ><img
-                                                                    src={`/images/common/skill/${inputData[index].skill}.jpg`}
-                                                                    alt={inputData[index].skill}
-                                                                    className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
                                                                 </button>
-                                                            </div>
-                                                            : null
+                                                                : null
+                                                        }
+                                                        {
+                                                            element.isAdd ?
+                                                                <div className="
+                                                                    h-[100%] flex flex-row-reverse relative
+                                                                    before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:left-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_left.png')]
+                                                                ">
+                                                                    <div className="
+                                                                            w-[68px] h-[100%] relative bg-black font-Mabinogi text-[#ffff5c]
+                                                                            before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
+                                                                            after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
+                                                                        ">
+                                                                        <input type="number" maxLength="2" min="0" max="100" value={inputData[index].percent} placeholder="00" className="
+                                                                            w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                                                                            " onChange={(event)=>{
+                                                                                percentInput(index, event);
+                                                                        }}/>
+                                                                    </div>
+                                                                    <button type="button"
+                                                                            className={`
+                                                                                w-[58px] h-[58px] relative text-[0px]
+                                                                                before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
+                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
+                                                                            `}
+                                                                            onClick={()=>{
+                                                                                selectActive(index);
+                                                                            }}
+                                                                    ><img src={`/images/common/skill/${inputData[index].skill}.jpg`} alt={inputData[index].skill} className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
+                                                                    </button>
+                                                                </div>
+                                                                : null
+                                                        }
+                                                    </div>
+                                                )
+                                            } else if (index === 2 || index === 4) {
+                                                return (
+                                                    <div className="h-[58px] relative flex items-center mt-[-20px]">
+                                                        {
+                                                            !element.isAdd ?
+                                                                <button type="button"
+                                                                        className={`${isBlink[index] && "animate-blink"}  px-[15px] pt-[6px] pb-[4px] absolute left-[22%] text-white text-[14px] font-Mabinogi translate-x-[-50%] bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
+                                                                        onMouseEnter={()=>addMouseEnter(index)} onMouseLeave={()=>addMouseLeave()} onClick={() =>addClickShow(index)}>추가
+                                                                </button>
+                                                                : null
+                                                        }
+                                                        {
+                                                            element.isAdd ?
+                                                                <div className="
+                                                                    h-[100%] flex relative
+                                                                    before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:right-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_right.png')]
+                                                                ">
+                                                                    <div className="
+                                                                            w-[68px] h-[100%] relative bg-black font-Mabinogi text-[#ffff5c]
+                                                                            before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
+                                                                            after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
+                                                                        ">
+                                                                        <input type="number" maxLength="2" min="0" max="100"
+                                                                               value={inputData[index].percent}
+                                                                               placeholder="00" className="
+                                                                            w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                                                                            " onChange={(event) => {
+                                                                            percentInput(index, event);
+                                                                        }}/>
+                                                                    </div>
+                                                                    <button type="button"
+                                                                            className={`
+                                                                                w-[58px] h-[58px] relative text-[0px]
+                                                                                before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
+                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
+                                                                            `}
+                                                                            onClick={() => {
+                                                                                selectActive(index);
+                                                                            }}
+                                                                    ><img
+                                                                        src={`/images/common/skill/${inputData[index].skill}.jpg`}
+                                                                        alt={inputData[index].skill}
+                                                                        className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
+                                                                    </button>
+                                                                </div>
+                                                                : null
+                                                        }
+                                                    </div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div className="flex mt-[-20px]">
+                                                        <div className="w-[68px] h-[58px] invisible"></div>
+                                                        <button type="button"
+                                                                className={`
+                                                                    w-[58px] h-[58px] relative text-[0px]
+                                                                    before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
+                                                                    after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
+                                                                `}
+                                                                onClick={() => {
+                                                                    selectActive(index);
+                                                                }}
+                                                        ><img src={`/images/common/skill/${inputData[index].skill}.jpg`}
+                                                              alt={inputData[index].skill}
+                                                              className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
+                                </div>
+                                <button type="button"
+                                        className={`
+                                            block px-[20px] pt-[8px] pb-[6px] m-auto mt-[22px] box-content text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg_long.png')]
+                                            ${countSelect >= 1 && !isSelect[0] ? "visible" : "invisible"}
+                                        `} onClick={()=>{
+                                            // trueIndexSelect 1이상 부터 실행
+                                            if (trueIndexSelect !== -1 && trueIndexSelect !== 0) {
+                                                //select된 index 부터 끝까지 isShow index false로 변환
+                                                isShow.map(function(child, subIndex){
+                                                    if(subIndex >= trueIndexSelect && subIndex < isSelect.length){
+                                                        isShow[subIndex] = false;
+                                                        setIsShow([...isShow]);
+    
+                                                        //입력된 skill, percent 초기화
+                                                        inputData[subIndex].skill = "blank";
+                                                        inputData[subIndex].percent = 0;
+                                                        setInputData([...inputData]);
                                                     }
-                                                </div>
-                                            )
-                                        } else {
-                                            return (
-                                                <div className="flex mt-[-20px]">
-                                                    <div className="w-[68px] h-[58px] invisible"></div>
-                                                    <button type="button"
-                                                            className={`
-                                                                w-[58px] h-[58px] relative text-[0px]
-                                                                before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
-                                                            `}
-                                                            onClick={() => {
-                                                                selectActive(index);
-                                                            }}
-                                                    ><img src={`/images/common/skill/${inputData[index].skill}.jpg`}
-                                                          alt={inputData[index].skill}
-                                                          className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
-                                                    </button>
-                                                </div>
-                                            )
-                                        }
-                                    })
-                                }
+                                                    return [...isShow]
+                                                });
+                                                
+                                                //isSelect 의 true값 false
+                                                isSelect[trueIndexSelect] = false;
+                                                setIsSelect([...isSelect]);
+                                            } else {
+                                                console.log('제거 불가 칸이거나 true 값이 없습니다');
+                                            }
+                                        }}
+                                >선택한 칸부터 끝까지 제거</button>
                             </div>
-                            <button type="button"
-                                    className={`
-                                        block px-[20px] pt-[8px] pb-[6px] m-auto mt-[22px] box-content text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg_long.png')]
-                                        ${countSelect >= 1 && !isSelect[0] ? "visible" : "invisible"}
-                                    `} onClick={()=>{
-                                        // trueIndexSelect 1이상 부터 실행
-                                        if (trueIndexSelect !== -1 && trueIndexSelect !== 0) {
-                                            //select된 index 부터 끝까지 isShow index false로 변환
-                                            isShow.map(function(child, subIndex){
-                                                if(subIndex >= trueIndexSelect && subIndex < isSelect.length){
-                                                    isShow[subIndex] = false;
-                                                    setIsShow([...isShow]);
-
-                                                    //입력된 skill, percent 초기화
-                                                    inputData[subIndex].skill = "blank";
-                                                    inputData[subIndex].percent = 0;
-                                                    setInputData([...inputData]);
-                                                }
-                                                return [...isShow]
-                                            });
-                                            
-                                            //isSelect 의 true값 false
-                                            isSelect[trueIndexSelect] = false;
-                                            setIsSelect([...isSelect]);
-                                        } else {
-                                            console.log('제거 불가 칸이거나 true 값이 없습니다');
+                            <div className="flex justify-center gap-[5px] mt-[10px]">
+                                {/* TODO::
+                                    1. 입력한 skill value 중에 blank value => Boolean CHECK
+                                    2. isSelect 가 1개 이상 체크되어있을 경우 모두 false 처리
+                                    3. 만약 percent 에 입력이 되어있다면, before percent value와 값을 비교했을 때 after value 이 같거나 작을 경우 custom.js 으로 넘어가지 않음
+                                    4. 만약 percent 에 입력이 "모두" 안되어있다면, custom.js로 넘어감
+                                    5. 위 내용이 모두 확인되어 문제 없을 경우 입력한 정보가 data.js(redux)에 저장되며 custom.js로 이동
+                                 */}
+                                <button type="submit" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={(event)=>{
+                                    event.preventDefault();
+                                    /*
+                                        1. isShow 에 true의 all index check
+                                        2. 1번을 바탕으로, inputData.skill of value NOT BLANK check =>
+                                        
+                                        
+                                        
+                                        ---
+                                        
+                                        
+                                        1. isShow true 갯수 확인
+                                        2. isShow true
+                                    */
+                                    
+                                    isShow.map(function(element, index){
+                                        if(element){
+                                            const skillFilter = inputData.filter((child, subIndex)=> subIndex === index && child.skill === "blank");
+                                            console.log(element, index, skillFilter);
                                         }
-                                    }}
-                            >선택한 칸부터 끝까지 제거</button>
-                        </div>
-                        <div className="flex justify-center gap-[5px] mt-[10px]">
-                            {/* TODO::
-                                1. 입력한 skill value 중에 blank value => Boolean CHECK 
-                                2. 입력한 percent blank value Boolean CHECK => true 1개 이상일 경우 custom.js 으로 넘어가지 않음
-                                3. before percent value와 값을 비교했을 때 after value 이 같거나 작을 경우 custom.js 으로 넘어가지 않음
-                                4. 위 내용이 모두 확인되어 문제 없을 경우 입력한 정보가 data.js(redux)에 저장되며 custom.js로 이동
-                             */}
-                            <button type="submit" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]">다음</button>
-                            <button type="button" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={()=>{
-                                //1. isShow, isSelect all false로 변경 / 2. inputData 초기화
-
-                                inputData.map(function(element, index){
-                                    isShow[index] = false;
-                                    isSelect[index] = false;
-                                    setIsShow([...isShow]);
-                                    setIsSelect([...isSelect]);
-
-                                    element.skill = "blank";
-                                    element.percent = 0;
-                                    setInputData([...inputData]);
-                                });
-                            }}>초기화</button>
-                        </div>
+                                    });
+                                    /*isShow.map(function(element, index){
+                                        if(element){ //isShow index true 인 것만
+                                            console.log(inputData[index].skill);
+                                            if(inputData[index].skill === "blank"){
+                                                console.log("no")
+                                            }
+                                        }
+                                    })*/
+                                    
+                                }}>다음</button>
+                                <button type="button" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={()=>{
+                                    //1. isShow, isSelect all false로 변경 / 2. inputData 초기화
+                                    inputData.map(function(element, index){
+                                        isShow[index] = false;
+                                        isShow[0] = true;
+                                        isSelect[index] = false;
+                                        setIsShow([...isShow]);
+                                        setIsSelect([...isSelect]);
+    
+                                        element.skill = "blank";
+                                        element.percent = 0;
+                                        setInputData([...inputData]);
+                                        //????? return 어떤 항목을 해줘야할지
+                                    });
+                                }}>초기화</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div className="relative px-[10px] py-[10px] ml-[10px] bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
                     <h5 className={`${countSelect >= 1 ? "visible" : "invisible"}`}>스킬 목록</h5>
-                    {/* 스킬 목록 */}
+                    {/* 스킬 목록 TODO :: scrollbar custom 필요 */}
                     <div className="h-[548px] overflow-y-auto">
                     {skill.map(function(element){
                         return (
@@ -314,4 +351,4 @@ export default function Input(){
             </div>
         </div>
     )
-};
+}
