@@ -1,34 +1,37 @@
 import {useState} from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import {pageNextInitData} from "../store/data";
 
 export default function Input(){
+    const dispatch = useDispatch();
     const skill = useSelector((state)=> state.skill );
-    const [isShow, setIsShow] = useState([true, false, false, false, false, false]); // inputData 로 이동
+    const combo = useSelector((state)=> state.combo );
     const [isBlink, setIsBlink] = useState([false, false, false, false, false, false]);
-    const [isSelect, setIsSelect] = useState([false, false, false, false, false, false]); // inputData 로 이동
     const [inputData, setInputData] = useState([
-        {skill:"blank", percent:"", isAdd:true, isSelect:false},{skill:"blank", percent:"", isAdd:false, isSelect:false},
-        {skill:"blank", percent:"", isAdd:false, isSelect:false},{skill:"blank", percent:"", isAdd:false, isSelect:false},
-        {skill:"blank", percent:"", isAdd:false, isSelect:false},{skill:"blank", percent:"", isAdd:false, isSelect:false},
+        {skill:"blank", percent:"", isShow:true, isSelect:false},{skill:"blank", percent:"", isShow:false, isSelect:false},
+        {skill:"blank", percent:"", isShow:false, isSelect:false},{skill:"blank", percent:"", isShow:false, isSelect:false},
+        {skill:"blank", percent:"", isShow:false, isSelect:false},{skill:"blank", percent:"", isShow:false, isSelect:false},
     ])
     
-    const countSelect = isSelect.filter((element)=> element === true).length;
-    const trueIndexSelect = isSelect.findIndex((element)=> element === true);
+    const countSelect = inputData.filter((element)=> element.isSelect === true).length;
+    const trueIndexSelect = inputData.findIndex((element)=> element.isSelect === true);
     
     /** 변수
-     *  1. isShow: 추가 버튼 클릭 시 콤보 칸 활성화 false -> true
-     *      1-1. index 0은 초기 값 true
-     *      1-2. custom 에서도 해당 값이 연동되어야 하는 가? -> NO (redux store/data.js 삽입 여부)
+     *  1. skill : 선택 가능한 스킬들의 redux data
      *  2. isBlink : mouseEnter / mouseLeave 활용 event
      *      2-1. mouseEnter 시 enter element index 와 같거나 미만인 index가 true로 변환되며 깜빡임
      *      2-2. mouseLeave 시 ALL element index 가 false로 변환
-     *  3. isSelect : 스킬 칸 클릭 시 (스킬 변경을 위한) 활성화 여부 false -> true
-     *      3-1. 클릭할 때 마다 prev value의 반대로 변경
-     *      3-2. custom 에서도 연동되어야 하는가 ? -> NO, why? combeData에 있는 개수만큼 순서대로 custom에서 뿌려주면 되고, 중간을 뛰어넘고 기입할 수 없기 떄문
+     *  3. inputData : combo 관련 data
+     *      3-1. skill : 초기 값 "blank", 스킬 목록에서 클릭 시 값 변경, 콤보 칸 제거 버튼 or 초기화 버튼 클릭 시 해당되는 index value reset
+     *      3-2. percent : 초기 값 "", focus 하여 00~99까지 숫자로 기입 가능 3-1 과 마찬가지로 콤보 칸 제거 버튼 or 초기화 버튼 클릭 시 해당되는 index value reset
+     *      3-3. isShow : 초기 값 false (index:0은 true), 클릭 시 not index 0 && before index all 값 true 로 변경, 콤보 칸 제거 버튼 or 초기화 버튼 클릭 시 value true
+     *      3-4. isSelect : 초기 값 false isShow 가 true 인 칸의 skill 을 클릭 시 true 로 변경, all index 중에 true 은 1개의 index 만 가능, true인 상태로 콤보 칸 제거 버튼 or 초기화 버튼 클릭 시 value false
+     *  4. countSelect : inputData.isSelect 에서 true 의 갯수 확인 변수
+     *      4-1. 어떤 기능에서 사용되는지 서술 예정
+     *  5. trueIndexSelect : inputData.isSelect 에서 true 의 값을 가지고 있는 index 확인 변수
+     *      5-1. 어떤 기능에서 사용되는지 서술 예정
      * **/
     
-    /* TODO :: state isShow를 inputData.isAdd로 이동중, 이동 완료되면 isAdd -> isShow name 변경 진행
-    * */
 
     const addMouseEnter = (index) => {
         isBlink.map(function (child, subIndex) {
@@ -57,12 +60,12 @@ export default function Input(){
                 
                 //isShow index 1부터 click index까지 모두 true로 변환
                 if(subIndex !== 0){
-                    inputData[subIndex].isAdd = true;
+                    inputData[subIndex].isShow = true;
                 }
             }
+            return setInputData([...inputData]);
         });
-        setInputData([...inputData]);
-        console.log(inputData);
+        
     }
     const percentInput = (index, event) => {
         //입력한 값이 maxLength보다 크거나 같을 경우 e.target.value값을 잘라줌
@@ -76,17 +79,19 @@ export default function Input(){
     const selectActive = (index)=> {
         //element click false => true / true => all false
         
+        
         if(countSelect <= 2){
-            isSelect.map(function(child, subIndex){
+            inputData.map(function(child, subIndex){
                 if(index !== subIndex){
-                    isSelect[subIndex] = false;
-                    setIsSelect([...isSelect]);
+                    child.isSelect = false;
+                    setInputData([...inputData]);
                 }
-                return [...isSelect]
+                return [...inputData]
             });
         }
-        isSelect[index] = !isSelect[index];
-        setIsSelect([...isSelect]);
+        //click 시 index.isSelect value 의 반대 값으로 계속 변경
+        inputData[index].isSelect = !inputData[index].isSelect;
+        setInputData([...inputData]);
     }
 
     return (
@@ -107,7 +112,7 @@ export default function Input(){
                     <h5 className="w-[488px] pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[url('/public/images/common/bg_top.png')]">콤보 카드 입력창</h5>
                     <div className="w-[484px] pt-[10px] pb-[20px] m-auto bg-no-repeat bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
                         {/* 콤보 카드 내부 */}
-                        <form action="">
+                        <form action="/custom">
                             <div className="w-[351px] pt-[140px] px-[25px] pb-[44px] m-auto bg-no-repeat bg-[url('/public/images/common/combocard_bg.jpg')]">
                                 <div>
                                     {
@@ -116,7 +121,7 @@ export default function Input(){
                                                 return (
                                                     <div className="h-[58px] relative flex flex-row-reverse items-center mt-[-20px]">
                                                         {
-                                                            !element.isAdd ?
+                                                            !element.isShow ?
                                                                 <button
                                                                     type="button"
                                                                     className={`${isBlink[index] && "animate-blink"} px-[15px] pt-[6px] pb-[4px] absolute right-[30%] text-white text-[14px] font-Mabinogi translate-x-full bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
@@ -125,7 +130,7 @@ export default function Input(){
                                                                 : null
                                                         }
                                                         {
-                                                            element.isAdd ?
+                                                            element.isShow ?
                                                                 <div className="
                                                                     h-[100%] flex flex-row-reverse relative
                                                                     before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:left-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_left.png')]
@@ -145,7 +150,7 @@ export default function Input(){
                                                                             className={`
                                                                                 w-[58px] h-[58px] relative text-[0px]
                                                                                 before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
+                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${inputData[index].isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
                                                                             onClick={()=>{
                                                                                 selectActive(index);
@@ -161,7 +166,7 @@ export default function Input(){
                                                 return (
                                                     <div className="h-[58px] relative flex items-center mt-[-20px]">
                                                         {
-                                                            !element.isAdd ?
+                                                            !element.isShow ?
                                                                 <button type="button"
                                                                         className={`${isBlink[index] && "animate-blink"}  px-[15px] pt-[6px] pb-[4px] absolute left-[22%] text-white text-[14px] font-Mabinogi translate-x-[-50%] bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
                                                                         onMouseEnter={()=>addMouseEnter(index)} onMouseLeave={()=>addMouseLeave()} onClick={() =>addClickShow(index)}>추가
@@ -169,7 +174,7 @@ export default function Input(){
                                                                 : null
                                                         }
                                                         {
-                                                            element.isAdd ?
+                                                            element.isShow ?
                                                                 <div className="
                                                                     h-[100%] flex relative
                                                                     before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:right-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_right.png')]
@@ -191,7 +196,7 @@ export default function Input(){
                                                                             className={`
                                                                                 w-[58px] h-[58px] relative text-[0px]
                                                                                 before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
+                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${inputData[index].isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
                                                                             onClick={() => {
                                                                                 selectActive(index);
@@ -214,7 +219,7 @@ export default function Input(){
                                                                 className={`
                                                                     w-[58px] h-[58px] relative text-[0px]
                                                                     before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                    after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${isSelect[index] ? "after:animate-blink" : "after:opacity-0"}
+                                                                    after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${inputData[index].isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                 `}
                                                                 onClick={() => {
                                                                     selectActive(index);
@@ -232,27 +237,28 @@ export default function Input(){
                                 <button type="button"
                                         className={`
                                             block px-[20px] pt-[8px] pb-[6px] m-auto mt-[22px] box-content text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg_long.png')]
-                                            ${countSelect >= 1 && !isSelect[0] ? "visible" : "invisible"}
+                                            ${countSelect >= 1 && !inputData[0].isSelect ? "visible" : "invisible"}
                                         `} onClick={()=>{
                                             // trueIndexSelect 1이상 부터 실행
                                             if (trueIndexSelect !== -1 && trueIndexSelect !== 0) {
                                                 //select된 index 부터 끝까지 isShow index false로 변환
-                                                isShow.map(function(child, subIndex){
-                                                    if(subIndex >= trueIndexSelect && subIndex < isSelect.length){
-                                                        isShow[subIndex] = false;
-                                                        setIsShow([...isShow]);
+                                                inputData.map(function(element, index){
+                                                    //isSelect true 인 index 와 클릭한 index 가 같거나 크고, index 보다 inputData 갯수가 클 경우
+                                                    if(index >= trueIndexSelect && index < inputData.length){
+                                                        //inputData state in "isShow" value false
+                                                        element.isShow = false;
     
                                                         //입력된 skill, percent 초기화
-                                                        inputData[subIndex].skill = "blank";
-                                                        inputData[subIndex].percent = 0;
+                                                        element.skill = "blank";
+                                                        element.percent = "";
                                                         setInputData([...inputData]);
                                                     }
-                                                    return [...isShow]
+                                                    return [...inputData]
                                                 });
                                                 
                                                 //isSelect 의 true값 false
-                                                isSelect[trueIndexSelect] = false;
-                                                setIsSelect([...isSelect]);
+                                                inputData[trueIndexSelect].isSelect = false;
+                                                setInputData([...inputData]);
                                             } else {
                                                 console.log('제거 불가 칸이거나 true 값이 없습니다');
                                             }
@@ -260,57 +266,82 @@ export default function Input(){
                                 >선택한 칸부터 끝까지 제거</button>
                             </div>
                             <div className="flex justify-center gap-[5px] mt-[10px]">
-                                {/* TODO::
-                                    1. 입력한 skill value 중에 blank value => Boolean CHECK
-                                    2. isSelect 가 1개 이상 체크되어있을 경우 모두 false 처리
-                                    3. 만약 percent 에 입력이 되어있다면, before percent value와 값을 비교했을 때 after value 이 같거나 작을 경우 custom.js 으로 넘어가지 않음
-                                    4. 만약 percent 에 입력이 "모두" 안되어있다면, custom.js로 넘어감
-                                    5. 위 내용이 모두 확인되어 문제 없을 경우 입력한 정보가 data.js(redux)에 저장되며 custom.js로 이동
-                                 */}
                                 <button type="submit" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={(event)=>{
                                     event.preventDefault();
-                                    /*
-                                        1. isShow 에 true의 all index check
-                                        2. 1번을 바탕으로, inputData.skill of value NOT BLANK check =>
-                                        
-                                        
-                                        
-                                        ---
-                                        
-                                        
-                                        1. isShow true 갯수 확인
-                                        2. isShow true
-                                    */
+                                    const countShow = inputData.filter((element)=> element.isShow);
+                                    const countShowAndSkill = inputData.filter((element)=> element.isShow && element.skill !== "blank");
+                                    const countShowAndPercent = inputData.filter((element)=> element.isShow && element.percent !== "");
                                     
-                                    isShow.map(function(element, index){
-                                        if(element){
-                                            const skillFilter = inputData.filter((child, subIndex)=> subIndex === index && child.skill === "blank");
-                                            console.log(element, index, skillFilter);
-                                        }
-                                    });
-                                    /*isShow.map(function(element, index){
-                                        if(element){ //isShow index true 인 것만
-                                            console.log(inputData[index].skill);
-                                            if(inputData[index].skill === "blank"){
-                                                console.log("no")
+                                    const pageNextDataPush = () => {countShow.map((element)=>dispatch(pageNextInitData({skill:element.skill, percent:element.percent, })));}
+                                    
+                                    if(countShow.length >= 2){
+                                        //isShow 값이 2개 이상일 경우
+                                        if(countShow.length === countShowAndSkill.length){
+                                            //isShow 갯수와 skill 입력한 갯수가 동일할 때
+                                            if(countShowAndPercent.length === 0){
+                                                //percent 가 모두 입력되어있지 않다면, 다음 페이지로 O
+                                                /*TODO ::
+                                                *   0. !!!! pageNextDataPush data reset
+                                                *   1. countShow 의 내용물들 dispatch로 redux data 로 push => ok
+                                                *   2. 다음 페이지로 이동 (react-router-dom 의 useNavigate 기능 예상)
+                                                * */
+                                                pageNextDataPush();
+                                                console.log(combo);
+                                                
+                                            }else if(countShowAndPercent.length === 1){
+                                                //percent 가 1개 이상 입력되어있다면
+                                                if(countShow.length === 2){
+                                                   //TODO:: isShow 값이 2개일 경우, 다음 페이지로 O
+                                                    
+                                                    pageNextDataPush();
+                                                    console.log(combo);
+                                                }else if(countShow.length > 2){
+                                                    //isShow 값이 2개보다 클 경우, 다음 페이지로 X
+                                                    event.preventDefault();
+                                                    alert("% 값을 모두 입력하거나 모두 비워주세요");
+                                                }else{
+                                                    console.error("error");
+                                                }
+                                            }else if(countShowAndPercent.length >= 2){
+                                                //percent 가 값이 2개 이상 있을 경우 before, after value comparison
+                                                
+                                                //TODO :: ???
+                                                /*if(){
+                                                    //before 값이 더 클 경우, 다음 페이지로 X
+                                                }else if(){
+                                                    //after 값이 더 클 경우, 다음 페이지로 O
+                                                }*/
+                                            }else{
+                                                console.error("error");
                                             }
+                                        }else if(countShow.length > countShowAndSkill.length) {
+                                            //skill:"blank"값이 1개라도 있을 때, 다음 페이지로 X
+                                            event.preventDefault();
+                                            alert("스킬을 빈 칸없이 모두 채워주세요");
+                                        }else {
+                                            console.error("error");
                                         }
-                                    })*/
-                                    
+                                    }else if(countShow < 2){
+                                        //isShow 값이 2개 미만일 경우, 다음 페이지로 X
+                                        alert("콤보 칸이 2개 이상 오픈 되어야 합니다");
+                                    }else{
+                                        console.error("error");
+                                    }
                                 }}>다음</button>
                                 <button type="button" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={()=>{
                                     //1. isShow, isSelect all false로 변경 / 2. inputData 초기화
                                     inputData.map(function(element, index){
-                                        isShow[index] = false;
-                                        isShow[0] = true;
-                                        isSelect[index] = false;
-                                        setIsShow([...isShow]);
-                                        setIsSelect([...isSelect]);
+                                        //isSelect 값 초기화
+                                        element.isSelect = false;
+                                        
+                                        //isShow 값 초기화
+                                        element.isShow = false;
+                                        inputData[0].isShow = true;
     
+                                        //skill, percent  전부 처음 값으로 초기화
                                         element.skill = "blank";
-                                        element.percent = 0;
-                                        setInputData([...inputData]);
-                                        //????? return 어떤 항목을 해줘야할지
+                                        element.percent = "";
+                                        return setInputData([...inputData]);
                                     });
                                 }}>초기화</button>
                             </div>
@@ -319,25 +350,30 @@ export default function Input(){
                 </div>
                 <div className="relative px-[10px] py-[10px] ml-[10px] bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
                     <h5 className={`${countSelect >= 1 ? "visible" : "invisible"}`}>스킬 목록</h5>
-                    {/* 스킬 목록 TODO :: scrollbar custom 필요 */}
-                    <div className="h-[548px] overflow-y-auto">
+                    <div className="h-[548px] overflow-y-auto
+                        [&::-webkit-scrollbar]:bg-[#282828] [&::-webkit-scrollbar-track]:bg-[#010101]
+                        [&::-webkit-scrollbar-thumb]:bg-[#282828] [&::-webkit-scrollbar-thumb]:border-[1px] [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:border-[#5d5d5d] [&::-webkit-scrollbar-thumb]:rounded-[3px]
+                        [&::-webkit-scrollbar-button]:bg-[#282828] [&::-webkit-scrollbar-button]:border-[1px] [&::-webkit-scrollbar-button]:border-solid [&::-webkit-scrollbar-button]:border-[#5d5d5d] [&::-webkit-scrollbar-button]:rounded-[3px]
+                    ">
                     {skill.map(function(element){
                         return (
-                            <div>
-                                <a href="#" title={element.name} className="flex" onClick={(event)=>{
-                                    event.preventDefault();
+                            <div className="flex cursor-pointer" onClick={()=>{
+                                const countSelect = inputData.filter((element)=> element.isSelect === true).length;
+                                
+                                //inputData.isSelect true 갯수가 0개보다 클 때
+                                if(countSelect > 0) {
                                     //isSelect value 중에 true 의 index 를 가져와, inputData[trueIndexSelect] 에 클릭한 skill.englishName 삽입
                                     inputData[trueIndexSelect].skill = element.englishName;
                                     setInputData([...inputData]);
-                                }}>
-                                    <div
-                                        className="w-[58px] h-[58px] relative bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">
-                                        <img src={`/images/common/skill/${element.englishName}.jpg`} alt={element.name} className="w-[50px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"/>
-                                    </div>
-                                    <p
-                                        className="w-[150px] h-[58px] text-white text-[14px] font-Mabinogi text-center leading-[58px] bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">{element.name}
-                                    </p>
-                                </a>
+                                }
+                            }}>
+                                <div
+                                    className="w-[58px] h-[58px] relative bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">
+                                    <img src={`/images/common/skill/${element.englishName}.jpg`} alt={element.name} className="w-[50px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"/>
+                                </div>
+                                <p
+                                    className="w-[150px] h-[58px] text-white text-[14px] font-Mabinogi text-center leading-[58px] bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">{element.name}
+                                </p>
                             </div>
                         )
                     })}

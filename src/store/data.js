@@ -111,16 +111,23 @@ let skill = createSlice({
 let comboData = createSlice({
     name: "comboData",
     initialState:{
-        items:[
-            {
-                id:0,
-                skill:"blank",
-                percent:0,
-            }
-        ],
+        items:[],
         nextId:0,
     },
+    reducers: {
+        pageNextInitData(state, action) {
+            const { skill, percent } = action.payload;
+            state.items.push({
+                id:state.nextId,
+                skill:skill,
+                percent:percent,
+            });
+            state.nextId++;
+        }
+    },
 });
+
+export let { pageNextInitData } = comboData.actions;
 
 export default configureStore({
     reducer: {
