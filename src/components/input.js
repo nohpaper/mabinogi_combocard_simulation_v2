@@ -1,11 +1,13 @@
 import {useState} from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import {pageNextInitData} from "../store/data";
 
 export default function Input(){
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const skill = useSelector((state)=> state.skill );
-    const combo = useSelector((state)=> state.combo );
+    //const combo = useSelector((state)=> state.combo.items );
     const [isBlink, setIsBlink] = useState([false, false, false, false, false, false]);
     const [inputData, setInputData] = useState([
         {skill:"blank", percent:"", isShow:true, isSelect:false},{skill:"blank", percent:"", isShow:false, isSelect:false},
@@ -140,7 +142,7 @@ export default function Input(){
                                                                             before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
                                                                             after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
                                                                         ">
-                                                                        <input type="number" maxLength="2" min="0" max="100" value={inputData[index].percent} placeholder="00" className="
+                                                                        <input type="number" maxLength="2" min="0" max="100" value={element.percent} placeholder="00" className="
                                                                             w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
                                                                             " onChange={(event)=>{
                                                                                 percentInput(index, event);
@@ -150,12 +152,12 @@ export default function Input(){
                                                                             className={`
                                                                                 w-[58px] h-[58px] relative text-[0px]
                                                                                 before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${inputData[index].isSelect ? "after:animate-blink" : "after:opacity-0"}
+                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
                                                                             onClick={()=>{
                                                                                 selectActive(index);
                                                                             }}
-                                                                    ><img src={`/images/common/skill/${inputData[index].skill}.jpg`} alt={inputData[index].skill} className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
+                                                                    ><img src={`/images/common/skill/${element.skill}.jpg`} alt={element.skill} className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
                                                                     </button>
                                                                 </div>
                                                                 : null
@@ -185,7 +187,7 @@ export default function Input(){
                                                                             after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
                                                                         ">
                                                                         <input type="number" maxLength="2" min="0" max="100"
-                                                                               value={inputData[index].percent}
+                                                                               value={element.percent}
                                                                                placeholder="00" className="
                                                                             w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
                                                                             " onChange={(event) => {
@@ -196,14 +198,14 @@ export default function Input(){
                                                                             className={`
                                                                                 w-[58px] h-[58px] relative text-[0px]
                                                                                 before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${inputData[index].isSelect ? "after:animate-blink" : "after:opacity-0"}
+                                                                                after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
                                                                             onClick={() => {
                                                                                 selectActive(index);
                                                                             }}
                                                                     ><img
-                                                                        src={`/images/common/skill/${inputData[index].skill}.jpg`}
-                                                                        alt={inputData[index].skill}
+                                                                        src={`/images/common/skill/${element.skill}.jpg`}
+                                                                        alt={element.skill}
                                                                         className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
                                                                     </button>
                                                                 </div>
@@ -219,13 +221,13 @@ export default function Input(){
                                                                 className={`
                                                                     w-[58px] h-[58px] relative text-[0px]
                                                                     before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
-                                                                    after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${inputData[index].isSelect ? "after:animate-blink" : "after:opacity-0"}
+                                                                    after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                 `}
                                                                 onClick={() => {
                                                                     selectActive(index);
                                                                 }}
-                                                        ><img src={`/images/common/skill/${inputData[index].skill}.jpg`}
-                                                              alt={inputData[index].skill}
+                                                        ><img src={`/images/common/skill/${element.skill}.jpg`}
+                                                              alt={element.skill}
                                                               className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
                                                         </button>
                                                     </div>
@@ -276,61 +278,103 @@ export default function Input(){
                                     
                                     if(countShow.length >= 2){
                                         //isShow 값이 2개 이상일 경우
+                                        console.warn("submit 1-1 →");
                                         if(countShow.length === countShowAndSkill.length){
                                             //isShow 갯수와 skill 입력한 갯수가 동일할 때
+                                            console.warn("submit 2-1 →");
                                             if(countShowAndPercent.length === 0){
                                                 //percent 가 모두 입력되어있지 않다면, 다음 페이지로 O
-                                                /*TODO ::
-                                                *   0. !!!! pageNextDataPush data reset
-                                                *   1. countShow 의 내용물들 dispatch로 redux data 로 push => ok
-                                                *   2. 다음 페이지로 이동 (react-router-dom 의 useNavigate 기능 예상)
-                                                * */
                                                 pageNextDataPush();
-                                                console.log(combo);
+                                                navigate("/custom");
+                                                console.warn("submit 3-1 O");
                                                 
                                             }else if(countShowAndPercent.length === 1){
                                                 //percent 가 1개 이상 입력되어있다면
+                                                
+                                                console.warn("submit 3-2 →");
                                                 if(countShow.length === 2){
                                                    //TODO:: isShow 값이 2개일 경우, 다음 페이지로 O
                                                     
                                                     pageNextDataPush();
-                                                    console.log(combo);
+                                                    navigate("/custom");
+                                                    console.warn("submit 4-1 O");
                                                 }else if(countShow.length > 2){
                                                     //isShow 값이 2개보다 클 경우, 다음 페이지로 X
                                                     event.preventDefault();
                                                     alert("% 값을 모두 입력하거나 모두 비워주세요");
+                                                    console.warn("submit 4-2 X");
                                                 }else{
                                                     console.error("error");
+                                                    console.warn("submit 4-3 X");
                                                 }
                                             }else if(countShowAndPercent.length >= 2){
                                                 //percent 가 값이 2개 이상 있을 경우 before, after value comparison
-                                                
-                                                //TODO :: ???
-                                                /*if(){
-                                                    //before 값이 더 클 경우, 다음 페이지로 X
-                                                }else if(){
-                                                    //after 값이 더 클 경우, 다음 페이지로 O
-                                                }*/
+                                                pageNextDataPush();//임시
+                                                navigate("/custom");
+                                                console.warn("submit 3-3 O");
+                                                /*countShow.map(function(element, index){
+                                                    const beforeIndex = index - 1;
+                                                    const numberCurrent = countShow[index].percent === "" ? 0 : Number(countShow[index].percent);
+                                                    let numberBefore;
+                                                    
+                                                    //index 1부터 확인
+                                                    if(index !== 0){
+                                                        numberBefore = countShow[beforeIndex].percent === "" ? 0 : Number(countShow[beforeIndex].percent);
+                                                        
+                                                        let positiveNumber = 0;
+                                                        const mathPercent = numberCurrent - numberBefore;
+                                                        
+                                                        if(mathPercent >= 0) {
+                                                            //양수 일 때
+                                                            
+                                                            //countShow - 1 (index 0 제외한 숫자)와 양수의 마지막 index가 동일한지 체크
+                                                            /!*if(countShow.length - 1 === index){
+                                                                console.log(countShow.length - 1, index, positiveNumber);
+                                                                pageNextDataPush();
+                                                            }else {
+                                                                console.log(countShow.length - 1, index);
+                                                                event.preventDefault();
+                                                                console.error("error");
+                                                            }*!/
+                                                        }else if(mathPercent <= -1){
+                                                            //음수일 때, 다음 페이지로 X
+                                                            event.preventDefault();
+                                                            
+                                                            alert("앞의 % 보다 숫자가 작을 수 없습니다")
+                                                            console.log(mathPercent, index, "음수");
+                                                        }
+                                                    }
+                                                });*/
                                             }else{
+                                                console.warn("submit 3-4 X");
+                                                event.preventDefault();
                                                 console.error("error");
                                             }
                                         }else if(countShow.length > countShowAndSkill.length) {
                                             //skill:"blank"값이 1개라도 있을 때, 다음 페이지로 X
+                                            
+                                            console.warn("submit 2-2 X");
                                             event.preventDefault();
                                             alert("스킬을 빈 칸없이 모두 채워주세요");
                                         }else {
+                                            event.preventDefault();
                                             console.error("error");
+                                            console.warn("submit 2-3 X");
                                         }
                                     }else if(countShow < 2){
+                                        event.preventDefault();
                                         //isShow 값이 2개 미만일 경우, 다음 페이지로 X
                                         alert("콤보 칸이 2개 이상 오픈 되어야 합니다");
+                                        console.warn("submit 1-2 X");
                                     }else{
+                                        event.preventDefault();
                                         console.error("error");
+                                        console.warn("submit 1-3 X");
                                     }
                                 }}>다음</button>
                                 <button type="button" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={()=>{
                                     //1. isShow, isSelect all false로 변경 / 2. inputData 초기화
-                                    inputData.map(function(element, index){
+                                    inputData.map(function(element){
                                         //isSelect 값 초기화
                                         element.isSelect = false;
                                         
