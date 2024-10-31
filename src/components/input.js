@@ -95,7 +95,7 @@ export default function Input(){
         inputData[index].isSelect = !inputData[index].isSelect;
         setInputData([...inputData]);
     }
-
+    
     return (
         <div>
             <div>

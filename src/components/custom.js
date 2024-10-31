@@ -5,10 +5,36 @@ import {useEffect, useState} from "react";
 export default function Custom(){
     const combo = useSelector((state)=> state.combo.items );
     const skill = useSelector((state)=> state.skill );
-    const [aaa, setAaa] = useState(false);
-    
+    const [arr, setArr] = useState();
     const [customData, setCustomData] = useState([]);
     
+    const countSelect = customData.filter((element)=> element.isSelect === true).length;
+    
+    const selectActive = (index) => {
+        
+        if(countSelect <= 2){
+            customData.map(function(child, subIndex){
+                if(index !== subIndex){
+                    child.isSelect = false;
+                    setCustomData([...customData]);
+                }
+                return [...customData]
+            });
+        }
+        
+        customData[index].isSelect = !customData[index].isSelect;
+        setCustomData([...customData]);
+    }
+    
+    useEffect(() => {
+        
+        combo.map(function(element){
+            return setCustomData((prev)=> ([...prev, {skill:element.skill, percent:element.percent, isSelect:false,}]));
+        });
+    }, []);
+    customData.splice(combo.length, customData.length - combo.length);//????
+    
+    console.log(customData);
     
     return (
         <div>
@@ -34,7 +60,7 @@ export default function Custom(){
                                 className="w-[351px] min-h-[468px] relative pt-[140px] px-[25px] pb-[44px] m-auto bg-no-repeat bg-[url('/public/images/common/combocard_bg.jpg')]">
                                 <div>
                                     {
-                                        combo.map(function (element, index) {
+                                        customData.map(function (element, index) {
                                             if (index === 1 || index === 3 || index === 5) {
                                                 return (
                                                     <div
@@ -48,14 +74,12 @@ export default function Custom(){
                                                                             before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
                                                                             after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
                                                                         ">
-                                                                <input type="number" maxLength="2" min="0"
-                                                                       max="100"
-                                                                    /*value={inputData[index].percent}*/
-                                                                       placeholder="00" className="
-                                                                            w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                                                                            " onChange={(event) => {
+                                                                {/* TODO:: element.percent value 0 ? text color gray : text color #ffff5c */}
+                                                                <p className={`
+                                                                            w-[28px] h-[100%] absolute inset-1/2 py-[17px] font-Mabinogi -translate-x-1/2 -translate-y-1/2 ${element.percent === "" ? "text-[#9ca3af]" : "text-[#ffff5c]"}
+                                                                            `} onClick={(event) => {
                                                                     // percentInput(index, event);
-                                                                }}/>
+                                                                }}>{element.percent === "" ? "00" : element.percent}</p>
                                                             </div>
                                                             <button type="button"
                                                                     className={`
@@ -63,9 +87,7 @@ export default function Custom(){
                                                                                 before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
                                                                                 after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
-                                                                /*onClick={() => {
-                                                                    selectActive(index);
-                                                                }}*/
+                                                                onClick={() => {selectActive(index);}}
                                                             ><img
                                                                 src={`/images/common/skill/${element.skill}.jpg`}
                                                                 alt={element.skill}
@@ -101,9 +123,7 @@ export default function Custom(){
                                                                                 before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
                                                                                 after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
-                                                                /*onClick={() => {
-                                                                    selectActive(index);
-                                                                }}*/
+                                                                    onClick={() => {selectActive(index);}}
                                                             ><img
                                                                 src={`/images/common/skill/${element.skill}.jpg`}
                                                                 alt={element.skill}
@@ -122,9 +142,7 @@ export default function Custom(){
                                                                     before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
                                                                     after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                 `}
-                                                            /*onClick={() => {
-                                                                selectActive(index);
-                                                            }}*/
+                                                                onClick={() => {selectActive(index);}}
                                                         ><img src={`/images/common/skill/${element.skill}.jpg`}
                                                               alt={element.skill}
                                                               className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
@@ -193,7 +211,7 @@ export default function Custom(){
                         absolute top-[102%] right-0 px-[10px] pt-[9px] pb-[5px] border-[1px] border-solid border-[#6b855e] rounded-sm text-[12px] text-[#151811] font-Mabinogi bg-[#a6ce92]
                         before:absolute before:top-[-12px] before:right-[19px] before:border-[12px] before:border-t-[0] before:border-r-[0] before:border-solid before:border-transparent before:border-b-[#6b855e]
                         after:absolute after:top-[-10px] after:right-[20px] after:border-[10px] after:border-t-[0] after:border-r-[0] after:border-solid after:border-transparent after:border-b-[#a6ce92]
-                        `}>여기에서 선택해요!</p>
+                        `}>스킬을 클릭하면 <br/>선택된 칸의 스킬과 %가 변경돼요!</p>
                 </div>
             </div>
         </div>
