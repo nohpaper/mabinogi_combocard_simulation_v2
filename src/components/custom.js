@@ -5,11 +5,20 @@ import {useEffect, useState} from "react";
 export default function Custom(){
     const combo = useSelector((state)=> state.combo.items );
     const skill = useSelector((state)=> state.skill );
-    const [arr, setArr] = useState();
+    const [allCoin, setAllCoin] = useState(0);
+    const [pageCounting, setPageCounting] = useState(0);
     const [customData, setCustomData] = useState([]);
     
     const countSelect = customData.filter((element)=> element.isSelect === true).length;
-    
+    const trueIndexSelect = customData.findIndex((element)=> element.isSelect === true);
+
+    const coinUsage = [3, 5, 7, 9, 11, 13]
+
+    /*customData.map(function(element){
+        if(element.useCoin !== ""){
+            setAllCoin((prev)=> Number(prev) + Number(element.useCoin));
+        }
+    })*/
     const selectActive = (index) => {
         
         if(countSelect <= 2){
@@ -27,15 +36,17 @@ export default function Custom(){
     }
     
     useEffect(() => {
-        
-        combo.map(function(element){
-            return setCustomData((prev)=> ([...prev, {skill:element.skill, percent:element.percent, isSelect:false,}]));
+        combo.map(function(element, index){
+            if(element.percent === undefined || element.percent === ""){
+                setCustomData((prev)=> ([...prev, {skill:element.skill, percent:0, purePercent:0, useCoin:5, isSelect:false,}]));
+            } else {
+                setCustomData((prev)=> ([...prev, {skill:element.skill, percent:element.percent, purePercent:element.percent - Number(combo[index - 1].percent), useCoin:5, isSelect:false,}]));
+            }
         });
     }, []);
     customData.splice(combo.length, customData.length - combo.length);//????
-    
+
     console.log(customData);
-    
     return (
         <div>
             <div>
@@ -74,12 +85,7 @@ export default function Custom(){
                                                                             before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
                                                                             after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
                                                                         ">
-                                                                {/* TODO:: element.percent value 0 ? text color gray : text color #ffff5c */}
-                                                                <p className={`
-                                                                            w-[28px] h-[100%] absolute inset-1/2 py-[17px] font-Mabinogi -translate-x-1/2 -translate-y-1/2 ${element.percent === "" ? "text-[#9ca3af]" : "text-[#ffff5c]"}
-                                                                            `} onClick={(event) => {
-                                                                    // percentInput(index, event);
-                                                                }}>{element.percent === "" ? "00" : element.percent}</p>
+                                                                <p className={`w-[28px] h-[100%] absolute inset-1/2 py-[17px] font-Mabinogi -translate-x-1/2 -translate-y-1/2 ${element.percent === 0 ? "text-[#9ca3af]" : "text-[#ffff5c]"}`}>{element.percent === 0 ? "00" : element.percent}</p>
                                                             </div>
                                                             <button type="button"
                                                                     className={`
@@ -108,14 +114,7 @@ export default function Custom(){
                                                                             before:content-['+'] before:absolute before:top-[50%] before:left-[10px] before:-translate-y-1/2
                                                                             after:content-['%'] after:absolute after:top-[50%] after:right-[10px] after:-translate-y-1/2
                                                                         ">
-                                                                <input type="number" maxLength="2" min="0"
-                                                                       max="100"
-                                                                    /*value={inputData[index].percent}*/
-                                                                       placeholder="00" className="
-                                                                            w-[28px] h-[100%] absolute inset-1/2 text-[#ffff5c] font-Mabinogi -translate-x-1/2 -translate-y-1/2 focus:outline-0 bg-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                                                                            " onChange={(event) => {
-                                                                    /*percentInput(index, event);*/
-                                                                }}/>
+                                                                <p className={`w-[28px] h-[100%] absolute inset-1/2 py-[17px] font-Mabinogi -translate-x-1/2 -translate-y-1/2 ${element.percent === 0 ? "text-[#9ca3af]" : "text-[#ffff5c]"}`}>{element.percent === 0 ? "00" : element.percent}</p>
                                                             </div>
                                                             <button type="button"
                                                                     className={`
@@ -153,12 +152,14 @@ export default function Custom(){
                                         })
                                     }
                                 </div>
-                                <button type="button"
+                                <p
                                         className={`
-                                            min-w-[145px] absolute bottom-[43px] left-1/2 px-[20px] pt-[8px] pb-[6px] box-content text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg_long.png')] -translate-x-1/2
+                                            min-w-[145px] absolute bottom-[43px] left-1/2 px-[20px] pt-[8px] pb-[6px] box-content text-white text-[14px] font-Mabinogi -translate-x-1/2
                                         `}
-                                >선택한 칸부터 끝까지 제거
-                                </button>
+                                >사용된 뱃지의 수 : <span>{
+                                    allCoin
+                                }</span>
+                                </p>
                             </div>
                             <div className="flex justify-center gap-[5px] mt-[10px]">
                                 <button type="submit"
@@ -186,14 +187,38 @@ export default function Custom(){
                         {skill.map(function (element) {
                             return (
                                 <div className="flex cursor-pointer" onClick={() => {
-                                    /*const countSelect = inputData.filter((element) => element.isSelect === true).length;
+                                    const percentValue = [0, 10, 10, 12, 15, 20];
+                                    const percentBreakLimitValue = [0, 0, 2, 3, 5, 10];
+                                    const normalPercent = 90;
+                                    const intervalProbability =  Math.floor((Math.random() * 99) + 1); //확률 값 0 ~ 100
+                                    const mathPercent = [Math.floor((Math.random() * percentValue[trueIndexSelect]) + 1), Math.floor((Math.random() * percentValue[trueIndexSelect]) + 1) + Math.floor(Math.random() * percentBreakLimitValue[trueIndexSelect] + 1)];
                                     
                                     //inputData.isSelect true 갯수가 0개보다 클 때
                                     if (countSelect > 0) {
                                         //isSelect value 중에 true 의 index 를 가져와, inputData[trueIndexSelect] 에 클릭한 skill.englishName 삽입
-                                        inputData[trueIndexSelect].skill = element.englishName;
-                                        setInputData([...inputData]);
-                                    }*/
+                                        customData[trueIndexSelect].skill = element.englishName;
+
+                                        if(trueIndexSelect !== 0){
+                                            //select 한 index 가 0이 아니라면
+
+                                            customData[trueIndexSelect].purePercent = intervalProbability < normalPercent ? mathPercent[0] : mathPercent[1];
+
+                                            let total = 0;
+                                            for (let index = 0; index < customData.length; index++) {
+                                                if (index === 0){
+                                                    // 0 번 째에 inputPercent 는 수정하지 않더라도 usingPercent 는 더해줘야 한다.
+                                                    total = Number(customData[0].purePercent)
+                                                    continue;
+                                                }
+                                                total += Number(customData[index].purePercent);
+
+                                                if(customData[index].purePercent !== 0){
+                                                    customData[index].percent = total;
+                                                }
+                                            }
+                                        }
+                                        setCustomData([...customData]);
+                                    }
                                 }}>
                                     <div
                                         className="w-[58px] h-[58px] relative bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">
@@ -208,7 +233,7 @@ export default function Custom(){
                         })}
                     </div>
                     <p className={`
-                        absolute top-[102%] right-0 px-[10px] pt-[9px] pb-[5px] border-[1px] border-solid border-[#6b855e] rounded-sm text-[12px] text-[#151811] font-Mabinogi bg-[#a6ce92]
+                        absolute top-[102%] right-0 px-[10px] pt-[9px] pb-[5px] border-[1px] border-solid border-[#6b855e] rounded-sm text-[12px] text-[#151811] font-Mabinogi bg-[#a6ce92] ${countSelect >= 1 ? "visible" : "invisible"}
                         before:absolute before:top-[-12px] before:right-[19px] before:border-[12px] before:border-t-[0] before:border-r-[0] before:border-solid before:border-transparent before:border-b-[#6b855e]
                         after:absolute after:top-[-10px] after:right-[20px] after:border-[10px] after:border-t-[0] after:border-r-[0] after:border-solid after:border-transparent after:border-b-[#a6ce92]
                         `}>스킬을 클릭하면 <br/>선택된 칸의 스킬과 %가 변경돼요!</p>
