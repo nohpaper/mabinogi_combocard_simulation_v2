@@ -81,7 +81,6 @@ export default function Input(){
     const selectActive = (index)=> {
         //element click false => true / true => all false
         
-        
         if(countSelect <= 2){
             inputData.map(function(child, subIndex){
                 if(index !== subIndex){
@@ -101,18 +100,36 @@ export default function Input(){
             <div>
                 {/*title*/}
                 <h1 className="pt-[20px] pb-[5px] text-center text-[32px] font-bold">콤보카드 커스텀마이징</h1>
-                <p className="text-center">새로 고침이나 현재 창을 벗어날 시 입력한 데이터가 날아가니 주의해주세요</p>
+                <p className="text-center text-red-500">새로 고침이나 현재 창을 벗어날 시 입력한 데이터가 날아가니 주의해주세요</p>
             </div>
             <div className="pt-[30px] flex justify-center">
                 {/* content */}
-                <div className="w-[100px] h-[100px] mr-[10px] bg-gray-200">
+                <div className="w-[500px] h-[600px] px-[30px] mr-[10px] bg-gray-200">
                     {/* 도움말 */}
-                    <h5>도움말</h5>
+                    <h5 className="pt-[15px] pb-[10px] font-bold">도움말</h5>
+                    <div className="text-[14px] pt-[20px] border-t-[1px] border-t-solid border-t-[#979797]">
+                        {/* 도움말 content */}
+                        <p>인 게임 내 콤보 카드 창에서 소지하고 있는 콤보 카드, 혹은 만들어 보고 싶은 가상의 콤보 카드를 입력하여 커스텀해보는 시뮬레이터</p>
+                        <span className="block text-gray-500">* 인 게임 확률과 상이할 수 있습니다.</span>
+                        
+                        <strong className="block pt-[20px] text-[16px]">[ 전체 진행 방법 ]</strong>
+                        <p className="pt-[5px]">1. 커스텀하고 싶은 수만큼 <span className="px-[5px] py-[3px] text-white text-[13px] rounded-[3px] bg-gray-700">추가</span> 버튼 클릭 (최대 6칸)</p>
+                        <p>2. <b>빈 칸을 클릭</b>하여 <u>오른쪽 스킬 목록에서 원하는 스킬 선택</u></p>
+                        <div className="px-[10px] py-[5px] mt-[5px] text-[13px] rounded-[3px] bg-gray-400">
+                            2-1. 추가 버튼을 눌러 <b>오픈된 빈 칸에 모두 스킬 선택 필수</b><br/>
+                            2-2. 퍼센트 입력 선택 (입력할 경우 앞 칸보다 %가 낮으면 안되고, 2군데 이상 입력)
+                        </div>
+                        <p className="pt-[5px]">3. <span className="px-[5px] py-[3px] text-white text-[13px] rounded-[3px] bg-gray-700">다음</span> 버튼을 클릭하여 커스텀하는 화면으로 이동
+                        </p>
+                        
+                        <span className="block pt-[30px] text-[13px]">* 추가 버튼 클릭하는 화면부터, <b className="text-red-500">즉 완전 처음부터 다시 하고 싶을 경우</b> 아래 <span className="px-[5px] py-[3px] text-white text-[12px] rounded-[3px] bg-gray-700">초기화</span> 버튼 클릭</span>
+                        <span className="block text-[13px]">* 4칸 콤카를 커스텀하고 싶은데 6칸으로 설정했을 경우 5번 칸 클릭 후 <span className="px-[5px] py-[3px] text-white text-[12px] rounded-[3px] bg-gray-700">아래 선택한 칸부터 끝까지 제거</span> 버튼 클릭</span>
+                    </div>
                 </div>
                 <div>
-                    {/* 콤보 카드 입력 창 */}
-                    <h5 className="w-[488px] pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[url('/public/images/common/bg_top.png')]">콤보 카드 입력창</h5>
-                    <div className="w-[484px] pt-[10px] pb-[20px] m-auto bg-no-repeat bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
+                {/* 콤보 카드 입력 창 */}
+                    <h5 className="w-[404px] pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[length:100%_100%] bg-[url('/public/images/common/bg_top.png')]">콤보 카드 입력창</h5>
+                    <div className="w-[400px] pt-[10px] pb-[20px] m-auto bg-no-repeat bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
                         {/* 콤보 카드 내부 */}
                         <form action="/custom">
                             <div className="w-[351px] pt-[140px] px-[25px] pb-[44px] m-auto bg-no-repeat bg-[url('/public/images/common/combocard_bg.jpg')]">
@@ -290,11 +307,9 @@ export default function Input(){
                                                 
                                             }else if(countShowAndPercent.length === 1){
                                                 //percent 가 1개 이상 입력되어있다면
-                                                
                                                 console.warn("submit 3-2 →");
+                                                
                                                 if(countShow.length === 2){
-                                                   //TODO:: isShow 값이 2개일 경우, 다음 페이지로 O
-                                                    
                                                     pageNextDataPush();
                                                     navigate("/custom");
                                                     console.warn("submit 4-1 O");
@@ -304,47 +319,49 @@ export default function Input(){
                                                     alert("% 값을 모두 입력하거나 모두 비워주세요");
                                                     console.warn("submit 4-2 X");
                                                 }else{
+                                                    event.preventDefault();
                                                     console.error("error");
                                                     console.warn("submit 4-3 X");
                                                 }
                                             }else if(countShowAndPercent.length >= 2){
                                                 //percent 가 값이 2개 이상 있을 경우 before, after value comparison
-                                                pageNextDataPush();//임시
-                                                navigate("/custom");
-                                                console.warn("submit 3-3 O");
-                                                /*countShow.map(function(element, index){
+                                                
+                                                console.warn("submit 3-3 →");
+                                                let checkArray = [];
+                                                
+                                                countShow.map(function(element, index){
                                                     const beforeIndex = index - 1;
                                                     const numberCurrent = countShow[index].percent === "" ? 0 : Number(countShow[index].percent);
                                                     let numberBefore;
                                                     
-                                                    //index 1부터 확인
                                                     if(index !== 0){
                                                         numberBefore = countShow[beforeIndex].percent === "" ? 0 : Number(countShow[beforeIndex].percent);
-                                                        
-                                                        let positiveNumber = 0;
                                                         const mathPercent = numberCurrent - numberBefore;
                                                         
-                                                        if(mathPercent >= 0) {
-                                                            //양수 일 때
-                                                            
-                                                            //countShow - 1 (index 0 제외한 숫자)와 양수의 마지막 index가 동일한지 체크
-                                                            /!*if(countShow.length - 1 === index){
-                                                                console.log(countShow.length - 1, index, positiveNumber);
-                                                                pageNextDataPush();
-                                                            }else {
-                                                                console.log(countShow.length - 1, index);
-                                                                event.preventDefault();
-                                                                console.error("error");
-                                                            }*!/
-                                                        }else if(mathPercent <= -1){
-                                                            //음수일 때, 다음 페이지로 X
-                                                            event.preventDefault();
-                                                            
-                                                            alert("앞의 % 보다 숫자가 작을 수 없습니다")
-                                                            console.log(mathPercent, index, "음수");
-                                                        }
+                                                        mathPercent >= 0 ? checkArray.push("양수") : checkArray.push("음수");
+                                                        
+                                                        console.log(mathPercent);
                                                     }
-                                                });*/
+                                                });
+                                                
+                                                //push 된 후 작동해야하는 변수
+                                                const checkFilter = checkArray.filter((element)=> element === "음수").length;
+                                                
+                                                if(checkFilter === 0){
+                                                    //모두 양수일 경우
+                                                    pageNextDataPush();
+                                                    navigate("/custom");
+                                                    console.warn("submit 4-1 O");
+                                                }else if(checkFilter >= 1){
+                                                    //하나 이상 음수일 경우
+                                                    event.preventDefault();
+                                                    alert("뒷 칸의 %는 앞보다 커야합니다");
+                                                    console.warn("submit 4-2 X");
+                                                }else {
+                                                    event.preventDefault();
+                                                    console.error("error");
+                                                    console.warn("submit 4-3 X");
+                                                }
                                             }else{
                                                 console.warn("submit 3-4 X");
                                                 event.preventDefault();
@@ -392,35 +409,38 @@ export default function Input(){
                         </form>
                     </div>
                 </div>
-                <div className="relative px-[10px] py-[10px] ml-[10px] bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
-                    <h5 className={`${countSelect >= 1 ? "visible" : "invisible"}`}>스킬 목록</h5>
-                    <div className="h-[548px] overflow-y-auto
+                <div
+                    className="relative ml-[10px] bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
+                    <h5 className="pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[length:100%_100%] bg-[url('/public/images/common/bg_top_small.jpg')]">
+                        스킬 목록</h5>
+                    <div className="h-[548px] overflow-y-auto px-[10px]
                         [&::-webkit-scrollbar]:bg-[#282828] [&::-webkit-scrollbar-track]:bg-[#010101]
                         [&::-webkit-scrollbar-thumb]:bg-[#282828] [&::-webkit-scrollbar-thumb]:border-[1px] [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:border-[#5d5d5d] [&::-webkit-scrollbar-thumb]:rounded-[3px]
                         [&::-webkit-scrollbar-button]:bg-[#282828] [&::-webkit-scrollbar-button]:border-[1px] [&::-webkit-scrollbar-button]:border-solid [&::-webkit-scrollbar-button]:border-[#5d5d5d] [&::-webkit-scrollbar-button]:rounded-[3px]
                     ">
-                    {skill.map(function(element){
-                        return (
-                            <div className="flex cursor-pointer" onClick={()=>{
-                                const countSelect = inputData.filter((element)=> element.isSelect === true).length;
-                                
-                                //inputData.isSelect true 갯수가 0개보다 클 때
-                                if(countSelect > 0) {
-                                    //isSelect value 중에 true 의 index 를 가져와, inputData[trueIndexSelect] 에 클릭한 skill.englishName 삽입
-                                    inputData[trueIndexSelect].skill = element.englishName;
-                                    setInputData([...inputData]);
-                                }
-                            }}>
-                                <div
-                                    className="w-[58px] h-[58px] relative bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">
-                                    <img src={`/images/common/skill/${element.englishName}.jpg`} alt={element.name} className="w-[50px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"/>
+                        {skill.map(function (element) {
+                            return (
+                                <div className="flex cursor-pointer" onClick={() => {
+                                    const countSelect = inputData.filter((element) => element.isSelect === true).length;
+                                    
+                                    //inputData.isSelect true 갯수가 0개보다 클 때
+                                    if (countSelect > 0) {
+                                        //isSelect value 중에 true 의 index 를 가져와, inputData[trueIndexSelect] 에 클릭한 skill.englishName 삽입
+                                        inputData[trueIndexSelect].skill = element.englishName;
+                                        setInputData([...inputData]);
+                                    }
+                                }}>
+                                    <div
+                                        className="w-[58px] h-[58px] relative bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">
+                                        <img src={`/images/common/skill/${element.englishName}.jpg`} alt={element.name}
+                                             className="w-[50px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"/>
+                                    </div>
+                                    <p
+                                        className="w-[150px] h-[58px] text-white text-[14px] font-Mabinogi text-center leading-[58px] bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">{element.name}
+                                    </p>
                                 </div>
-                                <p
-                                    className="w-[150px] h-[58px] text-white text-[14px] font-Mabinogi text-center leading-[58px] bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">{element.name}
-                                </p>
-                            </div>
-                        )
-                    })}
+                            )
+                        })}
                     </div>
                     <p className={`
                         absolute top-[102%] right-0 px-[10px] pt-[9px] pb-[5px] border-[1px] border-solid border-[#6b855e] rounded-sm text-[12px] text-[#151811] font-Mabinogi bg-[#a6ce92] ${countSelect >= 1 ? "visible" : "invisible"}
