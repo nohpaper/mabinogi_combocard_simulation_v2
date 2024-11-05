@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/mabinogi_combocard_simulation_v2/static/css/main.ed5ba519.css",
+    "main.js": "/mabinogi_combocard_simulation_v2/static/js/main.61c73098.js",
+    "static/js/453.48cb049e.chunk.js": "/mabinogi_combocard_simulation_v2/static/js/453.48cb049e.chunk.js",
+    "static/media/NotoSansKR-Bold.woff": "/mabinogi_combocard_simulation_v2/static/media/NotoSansKR-Bold.ab7f4321e713939dd0e6.woff",
+    "static/media/NotoSansKR-Regular.woff": "/mabinogi_combocard_simulation_v2/static/media/NotoSansKR-Regular.3063bb5f061c3bc34f7f.woff",
+    "static/media/NotoSansKR-Light.woff": "/mabinogi_combocard_simulation_v2/static/media/NotoSansKR-Light.5d420331bd938927b857.woff",
+    "static/media/MabinogiClassicR.woff": "/mabinogi_combocard_simulation_v2/static/media/MabinogiClassicR.e5ceddfe0ed1090696c5.woff",
+    "static/media/combocard_bg.jpg": "/mabinogi_combocard_simulation_v2/static/media/combocard_bg.435a3d2f24832b02866b.jpg",
+    "index.html": "/mabinogi_combocard_simulation_v2/index.html",
+    "main.ed5ba519.css.map": "/mabinogi_combocard_simulation_v2/static/css/main.ed5ba519.css.map",
+    "main.61c73098.js.map": "/mabinogi_combocard_simulation_v2/static/js/main.61c73098.js.map",
+    "453.48cb049e.chunk.js.map": "/mabinogi_combocard_simulation_v2/static/js/453.48cb049e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ed5ba519.css",
+    "static/js/main.61c73098.js"
+  ]
+}
