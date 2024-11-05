@@ -123,11 +123,14 @@ let comboData = createSlice({
                 percent:percent,
             });
             state.nextId++;
-        }
+        },
+        deleteData(state,){
+            state.items.splice(0, state.items.length);
+        },
     },
 });
 
-export let { pageNextInitData } = comboData.actions;
+export let { pageNextInitData, deleteData } = comboData.actions;
 
 export default configureStore({
     reducer: {

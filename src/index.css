@@ -43,3 +43,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@media (max-width:1024px) {
+  :root { font-size: 14px; }
+}
