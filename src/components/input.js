@@ -128,11 +128,11 @@ export default function Input(){
                 </div>
                 <div>
                 {/* 콤보 카드 입력 창 */}
-                    <h5 className="w-[404px] pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[length:100%_100%] bg-[url('/public/images/common/bg_top.png')]">콤보 카드 입력창</h5>
-                    <div className="w-[400px] pt-[10px] pb-[20px] m-auto bg-no-repeat bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
+                    <h5 className="w-[404px] pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[length:100%_100%] bg-[url('./public/images/common/bg_top.png')]">콤보 카드 입력창</h5>
+                    <div className="w-[400px] pt-[10px] pb-[20px] m-auto bg-no-repeat bg-[length:100%_100%] bg-[url('./public/images/common/bg_content.jpg')]">
                         {/* 콤보 카드 내부 */}
                         <form action="/custom">
-                            <div className="w-[351px] pt-[140px] px-[25px] pb-[44px] m-auto bg-no-repeat bg-[url('/public/images/common/combocard_bg.jpg')]">
+                            <div className="w-[351px] pt-[140px] px-[25px] pb-[44px] m-auto bg-no-repeat bg-[url('./public/images/common/combocard_bg.jpg')]">
                                 <div>
                                     {
                                         inputData.map(function(element, index){
@@ -143,7 +143,7 @@ export default function Input(){
                                                             !element.isShow ?
                                                                 <button
                                                                     type="button"
-                                                                    className={`${isBlink[index] && "animate-blink"} px-[15px] pt-[6px] pb-[4px] absolute right-[30%] text-white text-[14px] font-Mabinogi translate-x-full bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
+                                                                    className={`${isBlink[index] && "animate-blink"} px-[15px] pt-[6px] pb-[4px] absolute right-[30%] text-white text-[14px] font-Mabinogi translate-x-full bg-[length:100%_100%] bg-no-repeat bg-[url('./public/images/common/btn_bg.png')]`}
                                                                     onMouseEnter={()=>addMouseEnter(index)} onMouseLeave={()=>addMouseLeave()} onClick={() =>addClickShow(index)}>추가
                                                                 </button>
                                                                 : null
@@ -152,7 +152,7 @@ export default function Input(){
                                                             element.isShow ?
                                                                 <div className="
                                                                     h-[100%] flex flex-row-reverse relative
-                                                                    before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:left-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_left.png')]
+                                                                    before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:left-[-60px] before:bg-[length:100%_100%] before:bg-[url('./public/images/common/arrow_left.png')]
                                                                 ">
                                                                     <div className="
                                                                             w-[68px] h-[100%] relative bg-black font-Mabinogi text-[#ffff5c]
@@ -168,13 +168,13 @@ export default function Input(){
                                                                     <button type="button"
                                                                             className={`
                                                                                 w-[58px] h-[58px] relative text-[0px]
-                                                                                before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
+                                                                                before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('./public/images/common/skill_line.png')]
                                                                                 after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
                                                                             onClick={()=>{
                                                                                 selectActive(index);
                                                                             }}
-                                                                    ><img src={`/images/common/skill/${element.skill}.jpg`} alt={element.skill} className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
+                                                                    ><img src={`./images/common/skill/${element.skill}.jpg`} alt={element.skill} className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
                                                                     </button>
                                                                 </div>
                                                                 : null
@@ -187,7 +187,7 @@ export default function Input(){
                                                         {
                                                             !element.isShow ?
                                                                 <button type="button"
-                                                                        className={`${isBlink[index] && "animate-blink"}  px-[15px] pt-[6px] pb-[4px] absolute left-[22%] text-white text-[14px] font-Mabinogi translate-x-[-50%] bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]`}
+                                                                        className={`${isBlink[index] && "animate-blink"}  px-[15px] pt-[6px] pb-[4px] absolute left-[22%] text-white text-[14px] font-Mabinogi translate-x-[-50%] bg-[length:100%_100%] bg-no-repeat bg-[url('./public/images/common/btn_bg.png')]`}
                                                                         onMouseEnter={()=>addMouseEnter(index)} onMouseLeave={()=>addMouseLeave()} onClick={() =>addClickShow(index)}>추가
                                                                 </button>
                                                                 : null
@@ -196,7 +196,7 @@ export default function Input(){
                                                             element.isShow ?
                                                                 <div className="
                                                                     h-[100%] flex relative
-                                                                    before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:right-[-60px] before:bg-[length:100%_100%] before:bg-[url('/public/images/common/arrow_right.png')]
+                                                                    before:w-[61px] before:h-[29px] before:absolute before:top-[-10px] before:right-[-60px] before:bg-[length:100%_100%] before:bg-[url('./public/images/common/arrow_right.png')]
                                                                 ">
                                                                     <div className="
                                                                             w-[68px] h-[100%] relative bg-black font-Mabinogi text-[#ffff5c]
@@ -214,14 +214,14 @@ export default function Input(){
                                                                     <button type="button"
                                                                             className={`
                                                                                 w-[58px] h-[58px] relative text-[0px]
-                                                                                before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
+                                                                                before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('./public/images/common/skill_line.png')]
                                                                                 after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                             `}
                                                                             onClick={() => {
                                                                                 selectActive(index);
                                                                             }}
                                                                     ><img
-                                                                        src={`/images/common/skill/${element.skill}.jpg`}
+                                                                        src={`./images/common/skill/${element.skill}.jpg`}
                                                                         alt={element.skill}
                                                                         className="w-[51px] h-[51px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 z-10"/>
                                                                     </button>
@@ -237,7 +237,7 @@ export default function Input(){
                                                         <button type="button"
                                                                 className={`
                                                                     w-[58px] h-[58px] relative text-[0px]
-                                                                    before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('/public/images/common/skill_line.png')]
+                                                                    before:w-[100%] before:h-[100%] before:absolute before:inset-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:z-[2] before:bg-[url('./public/images/common/skill_line.png')]
                                                                     after:w-[115%] after:h-[115%] after:absolute after:inset-1/2 after:rounded-sm after:-translate-x-1/2 after:-translate-y-1/2 after:bg-white ${element.isSelect ? "after:animate-blink" : "after:opacity-0"}
                                                                 `}
                                                                 onClick={() => {
@@ -255,7 +255,7 @@ export default function Input(){
                                 </div>
                                 <button type="button"
                                         className={`
-                                            block px-[20px] pt-[8px] pb-[6px] m-auto mt-[22px] box-content text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg_long.png')]
+                                            block px-[20px] pt-[8px] pb-[6px] m-auto mt-[22px] box-content text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('./public/images/common/btn_bg_long.png')]
                                             ${countSelect >= 1 && !inputData[0].isSelect ? "visible" : "invisible"}
                                         `} onClick={()=>{
                                             // trueIndexSelect 1이상 부터 실행
@@ -285,7 +285,7 @@ export default function Input(){
                                 >선택한 칸부터 끝까지 제거</button>
                             </div>
                             <div className="flex justify-center gap-[5px] mt-[10px]">
-                                <button type="submit" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={(event)=>{
+                                <button type="submit" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('./public/images/common/btn_bg.png')]" onClick={(event)=>{
                                     event.preventDefault();
                                     const countShow = inputData.filter((element)=> element.isShow);
                                     const countShowAndSkill = inputData.filter((element)=> element.isShow && element.skill !== "blank");
@@ -389,7 +389,7 @@ export default function Input(){
                                         console.warn("submit 1-3 X");
                                     }
                                 }}>다음</button>
-                                <button type="button" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('/public/images/common/btn_bg.png')]" onClick={()=>{
+                                <button type="button" className="px-[20px] pt-[10px] pb-[8px] text-white text-[14px] font-Mabinogi bg-[length:100%_100%] bg-no-repeat bg-[url('./public/images/common/btn_bg.png')]" onClick={()=>{
                                     //1. isShow, isSelect all false로 변경 / 2. inputData 초기화
                                     inputData.map(function(element){
                                         //isSelect 값 초기화
@@ -410,8 +410,8 @@ export default function Input(){
                     </div>
                 </div>
                 <div
-                    className="relative ml-[10px] bg-[length:100%_100%] bg-[url('/public/images/common/bg_content.jpg')]">
-                    <h5 className="pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[length:100%_100%] bg-[url('/public/images/common/bg_top_small.jpg')]">
+                    className="relative ml-[10px] bg-[length:100%_100%] bg-[url('./public/images/common/bg_content.jpg')]">
+                    <h5 className="pl-[56px] text-white text-[14px] leading-[53px] font-Mabinogi bg-[length:100%_100%] bg-[url('./public/images/common/bg_top_small.jpg')]">
                         스킬 목록</h5>
                     <div className="h-[548px] overflow-y-auto px-[10px]
                         [&::-webkit-scrollbar]:bg-[#282828] [&::-webkit-scrollbar-track]:bg-[#010101]
@@ -431,12 +431,12 @@ export default function Input(){
                                     }
                                 }}>
                                     <div
-                                        className="w-[58px] h-[58px] relative bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">
-                                        <img src={`/images/common/skill/${element.englishName}.jpg`} alt={element.name}
+                                        className="w-[58px] h-[58px] relative bg-[length:100%_100%] bg-[url('./public/images/common/skill_line.png')]">
+                                        <img src={`./images/common/skill/${element.englishName}.jpg`} alt={element.name}
                                              className="w-[50px] absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"/>
                                     </div>
                                     <p
-                                        className="w-[150px] h-[58px] text-white text-[14px] font-Mabinogi text-center leading-[58px] bg-[length:100%_100%] bg-[url('/public/images/common/skill_line.png')]">{element.name}
+                                        className="w-[150px] h-[58px] text-white text-[14px] font-Mabinogi text-center leading-[58px] bg-[length:100%_100%] bg-[url('./public/images/common/skill_line.png')]">{element.name}
                                     </p>
                                 </div>
                             )
