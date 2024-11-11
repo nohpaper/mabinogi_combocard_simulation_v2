@@ -508,8 +508,7 @@ export default function Input(){
                         absolute top-[102%] right-0 px-10pxr pt-9pxr pb-5pxr border-[1px] border-solid border-[#6b855e] rounded-sm text-12pxr text-[#151811] font-Mabinogi bg-[#a6ce92] ${countSelect >= 1 ? "visible" : "invisible"}
                         before:absolute before:-top-12pxr before:right-19pxr before:border-12pxr before:border-t-[0] before:border-r-[0] before:border-solid before:border-transparent before:border-b-[#6b855e]
                         after:absolute after:-top-10pxr after:right-20pxr after:border-10pxr after:border-t-[0] after:border-r-[0] after:border-solid after:border-transparent after:border-b-[#a6ce92]
-                        laptop:-top-60pxr laptop:before:opacity-0 laptop:after:opacity-0
-                        tablet:top-[102%]
+                        laptop:before:opacity-0 laptop:after:opacity-0
                         `}>스킬 목록에서 선택해요!</p>
                 </div>
             </div>
