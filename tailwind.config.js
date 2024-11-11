@@ -15,6 +15,7 @@ module.exports = {
         "500pxr": pxToRem(500),
       },
       height:{
+        "250pxr": pxToRem(250),
         "468pxr": pxToRem(468),
         "548pxr": pxToRem(548),
         "600pxr": pxToRem(600),
@@ -37,6 +38,10 @@ module.exports = {
         "40pxr": pxToRem(40),
         "53pxr": pxToRem(53), //"3.3125rem",
         "58pxr": pxToRem(58), //"3.625rem",
+      },
+      borderWidth: {
+        "10pxr": pxToRem(10),
+        "12pxr": pxToRem(12),
       },
       borderRadius: {
         "3pxr": pxToRem(3),
@@ -65,6 +70,9 @@ module.exports = {
       
       'laptop': {max: '1024px'},
       // => @media (max-width: 1024px) { ... }
+      
+      'desktop': {max: '1280px'},
+      // => @media (max-width: 1280px) { ... }
     },
     spacing: Array.from({ length: 100 }, (_, i) => i + 1).reduce((acc, px) => {
       acc[`${px}pxr`] = pxToRem(px);

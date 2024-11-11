@@ -44,6 +44,15 @@ code {
     monospace;
 }
 
+@media (max-width:1280px) {
+  :root { font-size: 14px; }
+}
 @media (max-width:1024px) {
   :root { font-size: 14px; }
+}
+@media (max-width:768px) {
+  :root { font-size: 13px; }
+}
+@media (max-width:414px) {
+  :root { font-size: 12px; }
 }
